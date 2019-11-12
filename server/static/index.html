@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <!--禁止浏览器缩放-->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta content="application/xhtml+xml;charset=UTF-8" http-equiv="Content-Type"/>
+  <!--清除浏览器缓存-->
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+  <!--iPhone 手机上设置手机号码不被显示为拨号链接）-->
+  <meta content="telephone=no, address=no" name="format-detection"/>
+  <!--IOS私有属性，可以添加到主屏幕-->
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <!--屏幕顶部条的颜色-->
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <title>Web Presentation Controller</title>
+  <!-- 重置样式 -->
+  <link href="https://www.layuicdn.com/layui/css/layui.css" rel="stylesheet"/>
+  <!-- 主样式 -->
+  <link type="text/css" href="css/style.css" rel="stylesheet"/>
+</head>
+
+<body onselectstart="return false;">
+
+
+<div class="layui-container">
+  <div class="layui-row">
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell"
+         style="background-color: #F57878;border: black;border-style: solid">
+      <span>Home</span>
+    </div>
+    <div id="up" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #1673d2;">
+      <i class="layui-icon layui-icon-up"></i>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #18DA18;">
+      <span>End</span>
+    </div>
+  </div>
+  <div class="layui-row">
+    <div id="left" class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #B62EBE;">
+      <i class="layui-icon layui-icon-left"></i>
+    </div>
+    <div id="down" class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #59d5e6;">
+      <i class="layui-icon layui-icon-down"></i>
+    </div>
+    <div id="right" class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #fd5c04;">
+      <i class="layui-icon layui-icon-right"></i>
+    </div>
+  </div>
+  <div class="layui-row">
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #e86eb2;">
+      <span>Goto</span>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #3AE056;">
+      <span>AutoPlay</span>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #2FB0A1;">
+      <span>Stop</span>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="https://www.layuicdn.com/layui/layui.all.js"></script>
+<script type="text/javascript" src="js/controller.js"></script>
+</body>
+</html>

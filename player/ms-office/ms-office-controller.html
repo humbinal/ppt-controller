@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>MS-Office PPT Controller</title>
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+    window.onload = function () {
+        var WshShell = new ActiveXObject("WScript.Shell");
+
+        // 打开一个WebSocket
+        var ws = new WebSocket('wss://localhost:3000');
+        // 响应onmessage事件
+        ws.onmessage = function (msg) {
+            console.log(msg)
+        }
+        // 给服务器发送一个指令
+        let data = {type: "PLAYER", uid: "1111"};
+        ws.send(JSON.stringify(data));
+
+        /*socket.on("broad", function (event) {
+            console.log("recevied");
+            var step = event.data;
+            switch (step) {
+                case 'left':
+                    WshShell.SendKeys("{LEFT}");
+                    break;
+                case 'right':
+                    WshShell.SendKeys("{RIGHT}");
+                    break;
+                case 'up':
+                    WshShell.SendKeys("{UP}");
+                    break;
+                case 'down':
+                    WshShell.SendKeys("{DOWN}");
+                    break;
+            }
+        })*/
+    }
+</script>
+</body>
+</html>
