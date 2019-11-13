@@ -1,21 +1,57 @@
 .layui-container .layui-row {
-  margin-top: 15px;
+  margin-top: 0.5rem;
 }
 
 .layui-container .cell {
   height: 6rem;
   text-align: center;
-  padding: 0 15px 0 15px;
+  width: 31%;
+  margin: 0 1% 0 1%;
+  cursor: pointer;
 }
 
 .layui-container .layui-col-md4 i {
   line-height: 6rem;
-  font-size: 2rem;
+  font-size: 1.8rem;
   color: #ffffff;
 }
 
 .layui-container .layui-col-md4 span {
   line-height: 6rem;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: #ffffff;
+}
+
+.head {
+  text-align: center;
+  height: 3rem;
+  font-size: 1.4rem;
+  color: #fff;
+  line-height: 3rem;
+  margin: 10px 1% 0 1%;
+  background: rgb(35, 165, 120);
+}
+
+.head-uid {
+  line-height: 30px;
+  margin: 0 0 0 1.5%;
+  font-size: 1.16rem;
+}
+
+.head-uid span {
+  display: inline-flex;
+}
+
+.head-uid .label {
+  display: inline-flex;
+  margin-top: 4px;
+}
+
+.head-uid .uid {
+  color: #ffb25f;
+}
+
+.head-uid .layui-btn {
+  margin-left: 20px;
+  margin-bottom: 4px;
 }

@@ -27,43 +27,147 @@
 
 
 <div class="layui-container">
+  <div class="head">
+    <h2>PPT Controller</h2>
+  </div>
+
   <div class="layui-row">
-    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell"
-         style="background-color: #F57878;border: black;border-style: solid">
+    <div class="head-uid">
+      <span class="label">Current Player ID: </span>
+      <span class="uid" id="show-uid"></span>
+      <button id="edit-uid" type="button" class="layui-btn layui-btn-sm">
+        <i class="layui-icon">&#xe642;</i>
+      </button>
+    </div>
+  </div>
+
+  <div class="layui-row">
+    <div id="home" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #F57878;">
       <span>Home</span>
     </div>
     <div id="up" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #1673d2;">
       <i class="layui-icon layui-icon-up"></i>
     </div>
-    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #18DA18;">
+    <div id="end" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #18DA18;">
       <span>End</span>
     </div>
   </div>
   <div class="layui-row">
-    <div id="left" class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #B62EBE;">
+    <div id="left" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #B62EBE;">
       <i class="layui-icon layui-icon-left"></i>
     </div>
-    <div id="down" class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #59d5e6;">
+    <div id="down" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #59d5e6;">
       <i class="layui-icon layui-icon-down"></i>
     </div>
-    <div id="right" class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #fd5c04;">
+    <div id="right" class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #fd5c04;">
       <i class="layui-icon layui-icon-right"></i>
     </div>
   </div>
   <div class="layui-row">
-    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #e86eb2;">
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4 cell" style="background-color: #e86eb2;">
       <span>Goto</span>
     </div>
-    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #3AE056;">
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4  cell" style="background-color: #3AE056;">
       <span>AutoPlay</span>
     </div>
-    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4" style="background-color: #2FB0A1;">
+    <div class="layui-col-xs4 layui-col-sm4 layui-col-md4  cell" style="background-color: #2FB0A1;">
       <span>Stop</span>
     </div>
   </div>
 </div>
 
+
 <script type="text/javascript" src="https://www.layuicdn.com/layui/layui.all.js"></script>
-<script type="text/javascript" src="js/controller.js"></script>
+<script type="text/javascript">
+    /*
+    封装 WebSocket 实例化的方法
+    */
+    function CreateWebSocket(urlValue) {
+        if (window.WebSocket) {
+            return new WebSocket(urlValue);
+        }
+        if (window.MozWebSocket) {
+            return new MozWebSocket(urlValue);
+        }
+    }
+
+    /*
+    获取websocket的地址
+    */
+    function getUrl() {
+        return "ws://" + window.location.hostname + ':' + window.location.port;
+    }
+
+    /*
+    打开页面弹框，并进行连接
+     */
+    layui.use('layer', function () {
+        let layer = layui.layer;
+        let webSocket = null;
+        let uid = null;
+
+        function openLayer() {
+            layer.open({
+                closeBtn: 0,
+                shade: [0.8, '#393D49'],
+                title: 'Input Player ID',
+                content: '<input type="text" id="input-uid" name="" placeholder="input your player id" autocomplete="off" class="layui-input">',
+                yes: function (index, layero) {
+                    //do something
+                    let inputUid = document.getElementById("input-uid").value;
+                    console.log("input uid: ", inputUid)
+                    // 创建WebSocket连接对象
+                    webSocket = CreateWebSocket(getUrl());
+                    //开始监听服务器消息
+                    webSocket.onmessage = function (msg) {
+                        let response = JSON.parse(msg.data);
+                        console.log("recv from server: " + JSON.stringify(response));
+                        if (response !== undefined && response.code === 0) {
+                            document.getElementById("show-uid").innerText = inputUid;
+                            uid = inputUid;
+                            layer.close(index);
+                        } else {
+                            window.alert("Player ID Incorrect!")
+                        }
+                    };
+                    //当连接建立好之后发送消息
+                    webSocket.addEventListener('open', function () {
+                        let init = {type: "CONTROLLER", uid: inputUid, play: "init"}
+                        webSocket.send(JSON.stringify(init));
+                    });
+                }
+            });
+        }
+
+        //首次打开弹出输入框，并连接校验
+        openLayer();
+
+        //修改ID功能
+        document.getElementById("edit-uid").addEventListener("click", function () {
+            //再次打开弹出输入框，并连接校验
+            openLayer();
+        });
+
+        //监听按钮点击事件，进行play操做
+        document.getElementById("up").addEventListener("click", function () {
+            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "up"}));
+        });
+        document.getElementById("left").addEventListener("click", function () {
+            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "left"}));
+        });
+        document.getElementById("down").addEventListener("click", function () {
+            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "down"}));
+        });
+        document.getElementById("right").addEventListener("click", function () {
+            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "right"}));
+        });
+        document.getElementById("home").addEventListener("click", function () {
+            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "home"}));
+        });
+        document.getElementById("end").addEventListener("click", function () {
+            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "end"}));
+        });
+    });
+</script>
 </body>
 </html>

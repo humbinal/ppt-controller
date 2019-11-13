@@ -44,11 +44,15 @@ wss.on('connection', function (ws) {
       let targetClient = reader_controller_map.get(data.uid);
 
       //判断目标客户端状态，如果未连接则提示错误
-      if (targetClient.readyState === WebSocket.OPEN) {
-        targetClient.send(data.play)
+      if (targetClient && targetClient.readyState === WebSocket.OPEN) {
+        if (data.play === 'init') {
+          ws.send(JSON.stringify({code: 0, error: "OK"}))
+        } else {
+          targetClient.send(data.play)
+        }
       } else {
         console.error(`targetClient: ${data.uid} not connected!`)
-        //
+        ws.send(JSON.stringify({code: 1, error: "NOT_FOUND"}))
       }
 
     } else {

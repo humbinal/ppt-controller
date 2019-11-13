@@ -15,7 +15,7 @@ function uid_gen(length) {
 }
 
 let uid = uid_gen(4);
-window.alert("您的UID为: " + uid);
+window.alert("Please record your player ID: " + uid);
 let impressApi = impress();
 // 打开一个WebSocket
 var ws = new WebSocket(WS_ADDR);
@@ -43,6 +43,9 @@ ws.onmessage = function (msg) {
       break;
     case 'down':
       impressApi.next();
+      break;
+    case 'home':
+      impressApi.goto(0);
       break;
     default:
   }
