@@ -114,7 +114,7 @@
                 content: '<input type="text" id="input-uid" name="" placeholder="input your player id" autocomplete="off" class="layui-input">',
                 yes: function (index, layero) {
                     //do something
-                    let inputUid = document.getElementById("input-uid").value;
+                    let inputUid = document.getElementById("input-uid").value.trim();
                     console.log("input uid: ", inputUid)
                     // 创建WebSocket连接对象
                     webSocket = CreateWebSocket(getUrl());
@@ -132,8 +132,7 @@
                     };
                     //当连接建立好之后发送消息
                     webSocket.addEventListener('open', function () {
-                        let init = {type: "CONTROLLER", uid: inputUid, play: "init"}
-                        webSocket.send(JSON.stringify(init));
+                        webSocket.send(JSON.stringify({type: 'CONTROLLER', event: 'init', uid: inputUid}));
                     });
                 }
             });
@@ -150,22 +149,22 @@
 
         //监听按钮点击事件，进行play操做
         document.getElementById("up").addEventListener("click", function () {
-            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "up"}));
+            webSocket.send(JSON.stringify({type: "CONTROLLER", event: 'play', uid: uid, play: "up"}));
         });
         document.getElementById("left").addEventListener("click", function () {
-            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "left"}));
+            webSocket.send(JSON.stringify({type: "CONTROLLER", event: 'play', uid: uid, play: "left"}));
         });
         document.getElementById("down").addEventListener("click", function () {
-            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "down"}));
+            webSocket.send(JSON.stringify({type: "CONTROLLER", event: 'play', uid: uid, play: "down"}));
         });
         document.getElementById("right").addEventListener("click", function () {
-            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "right"}));
+            webSocket.send(JSON.stringify({type: "CONTROLLER", event: 'play', uid: uid, play: "right"}));
         });
         document.getElementById("home").addEventListener("click", function () {
-            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "home"}));
+            webSocket.send(JSON.stringify({type: "CONTROLLER", event: 'play', uid: uid, play: "home"}));
         });
         document.getElementById("end").addEventListener("click", function () {
-            webSocket.send(JSON.stringify({type: "CONTROLLER", uid: uid, play: "end"}));
+            webSocket.send(JSON.stringify({type: "CONTROLLER", event: 'play', uid: uid, play: "end"}));
         });
     });
 </script>

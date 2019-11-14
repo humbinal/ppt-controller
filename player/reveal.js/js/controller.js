@@ -15,42 +15,55 @@ function uid_gen(length) {
 }
 
 let uid = uid_gen(4);
-window.alert("Please record your player ID: " + uid);
-let revealApi = Reveal;
-// 打开一个WebSocket
-var ws = new WebSocket(WS_ADDR);
 
+// 打开一个WebSocket
+let ws = new WebSocket(WS_ADDR);
 // 给服务器发送一个指令,注册自己的UID
-let data = {type: "PLAYER", uid: uid};
+let data = {type: "PLAYER", event: 'init', uid: uid};
 //添加事件监听
 ws.addEventListener('open', function () {
   ws.send(JSON.stringify(data));
 });
 
+ws.addEventListener('close', function () {
+  window.alert("Player connection with server has broken!");
+});
+
+//PPT控制api对象
+let revealApi = Reveal;
 // 响应onmessage事件，进行PPT控制
 ws.onmessage = function (msg) {
-  let play = msg.data;
-  console.log("received msg data: ", play)
-  switch (play) {
-    case 'left':
-      revealApi.left();
-      break;
-    case 'right':
-      revealApi.right();
-      break;
-    case 'up':
-      revealApi.up();
-      break;
-    case 'down':
-      revealApi.down();
-      break;
-    case 'home':
-      revealApi.slide(0, 0);
-      break;
-    case 'end':
-      revealApi.slide(revealApi.getTotalSlides() - 1);
-      break;
-    default:
+  let response = msg.data;
+  console.log("received msg data: ", response);
+  let data = JSON.parse(response);
+  if (data.event === 'init') {
+    window.alert("Please record your player ID: " + uid);
+  } else if (data.event === 'play') {
+    let play = data.play;
+    switch (play) {
+      case 'left':
+        revealApi.left();
+        break;
+      case 'right':
+        revealApi.right();
+        break;
+      case 'up':
+        revealApi.up();
+        break;
+      case 'down':
+        revealApi.down();
+        break;
+      case 'home':
+        revealApi.slide(0, 0);
+        break;
+      case 'end':
+        revealApi.slide(revealApi.getTotalSlides() - 1);
+        break;
+      default:
+        console.warn("player controller received play action: ", play, " , but do nothing!")
+    }
+  } else {
+    console.log("player controller received msg, but event not is 'init' or 'play', event is: ", data.event)
   }
 }
 
